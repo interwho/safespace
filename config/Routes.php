@@ -31,6 +31,19 @@ $collection->add(
 );
 
 $collection->add(
+    'PageController_login',
+    new Route(
+        '/login',
+        array(
+            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::login'
+        ),
+        array(
+            '_method' => 'GET'
+        )
+    )
+);
+
+$collection->add(
     'MessageController_email',
     new Route(
         '/latest',
