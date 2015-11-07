@@ -20,7 +20,7 @@ class SentimentAnalysisService
         try {
             $request->send();
             if ($request->getResponseCode() == 200) {
-                return $this->analyzeSentimentResponse($request->getResponseBody());
+                return $this->isPositiveResponse($request->getResponseBody());
             } else {
                 return false;
             }
@@ -42,7 +42,7 @@ class SentimentAnalysisService
      * @param $responseBody
      * @return boolean
      */
-    private function analyzeSentimentResponse($responseBody) {
+    private function isPositiveResponse($responseBody) {
         $negativeResults = $responseBody['negative'];
 
         if (!empty($negativeResults)) {
