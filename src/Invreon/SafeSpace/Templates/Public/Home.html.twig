@@ -4,9 +4,14 @@
     <div class="row">
         <div class="col-lg-12 text-center">
             <h1>Remove negativity from your tweets, now!</h1>
-            <p class="lead">Just login using twitter!</p>
-            <a class="badge" style="font-size: large; padding: 10px;" href="/register">Try it now!</a>
-            <!-- Insert Demo Content Here -->
+
+            <a class="btn btn-primary" href="{{ login_url }}">
+                Login with Twitter
+            </a>
+
+            <div>
+                {{ user }}
+            </div>
         </div>
     </div>
 
