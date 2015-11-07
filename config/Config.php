@@ -12,3 +12,5 @@ $GLOBALS['DATABASE'] = array(
     'password' => 'root',
     'dbname'   => 'safespace'
 );
+
+define('HAVEN_API_KEY', '0b33b80f-771d-436c-9347-88d0312e5a44');
