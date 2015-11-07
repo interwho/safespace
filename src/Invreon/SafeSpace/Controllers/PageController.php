@@ -4,6 +4,7 @@ namespace Invreon\SafeSpace\Controllers;
 
 use Invreon\SafeSpace\Entities\User;
 use Invreon\SafeSpace\Services\DoctrineService;
+use Invreon\SafeSpace\Services\SentimentAnalysisService;
 use Invreon\SafeSpace\Services\TwigService;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,23 +79,66 @@ class PageController extends Controller
 
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
-            $access_token = $connection->oauth("oauth/access_token", array("oauth_verifier" => $requestToken['oauth_verifier']));
+            $accessToken = $connection->oauth("oauth/access_token", array("oauth_verifier" => $requestToken['oauth_verifier']));
 
-            $user->setOAuthUid( $requestToken['oauth_token']);
+            // Grab full user information and store
+            $user->setOAuthProvider($requestToken['oauth_verifier']);
 
-            // obtaining the entity manager
-            $user->setOAuthProvider($access_token);
+            $user->setOAuthToken($accessToken['oauth_token']);
+            $user->setOAuthSecret($accessToken['oauth_token_secret']);
+            $user->setOAuthUid($accessToken['user_id']);
+            $user->setUsername($accessToken['screen_name']);
 
             $em = (new DoctrineService())->getManager();
             $em->persist($user);
             $em->flush($user);
 
-            $context['user'] = $connection->get("account/verify_credentials");
+            // Grab tweets with a new connection
+            $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
-            var_dump($context['user']); die();
+            $recentTweets = $connection->get("statuses/user_timeline", array(
+                "count" => 25,
+                "exclude_replies" => true,
+                "screen_name" => $user->getUsername())
+            );
+
+            $positiveTweets = $this->grabPositiveTweets($recentTweets);
+
+            $context['tweets'] = $positiveTweets;
+
             return $this->createResponse($twigService->render('Home.html.twig', $context));
         }
 
         return $this->createResponse($twigService->render('Home.html.twig', $context));
+    }
+
+    /**
+     * @param $tweets
+     * @return array
+     */
+    private function grabPositiveTweets($tweets) {
+        $textArray = [];
+        foreach ($tweets as $tweet) {
+            array_push($textArray, $tweet->text);
+        }
+
+        return $this->filterTweets($textArray);
+    }
+
+    /**
+     * @param $tweetArray
+     * @return array
+     */
+    private function filterTweets($tweetArray) {
+        $sentimentService = new SentimentAnalysisService();
+
+        $positiveTweets = [];
+        foreach ($tweetArray as $tweet) {
+            if ($sentimentService->isPositiveText($tweet)) {
+                array_push($positiveTweets, $tweet);
+            }
+        }
+
+        return $positiveTweets ;
     }
 }
