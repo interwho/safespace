@@ -32,6 +32,8 @@
         "symfony/routing": "^2.7",
         "doctrine/orm": "^2.5",
         "twig/twig": "~1.0",
-        "nette/utils": "^2.3"
+        "nette/utils": "^2.3",
+        "abraham/twitteroauth": "^0.6.2",
+        "doctrine/doctrine-bundle": "^1.6"
     }
 }
