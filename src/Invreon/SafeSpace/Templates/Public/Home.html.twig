@@ -9,6 +9,16 @@
                 Login with Twitter
             </a>
 
+            {% if tweets is defined %}
+            <div>
+                <h1>No Negative Tweets!</h1>
+                <ul>
+                    {% for tweet in tweets %}
+                        <li> {{ tweet }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </div>
 
