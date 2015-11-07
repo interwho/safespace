@@ -1,29 +1,60 @@
 <?php
 namespace Invreon\SafeSpace\Entities;
 
-// src/Invreon/SafeSpace/Entities/User.php
+use Doctrine\ORM\Mapping;
 /**
+ * User
+ *
+ * @Table(name="users")
  * @Entity
- * @Table(name="user")
  */
 class User
 {
-    /** @Id @Column(type="integer") @GeneratedValue * */
+    /**
+     * @var integer $id
+     *
+     * @Column(name="id", type="integer", nullable=true)
+     * @Id
+     * @GeneratedValue
+     */
     protected $id;
 
-    /** @Column(type="string") */
+    /**
+     * @var string $username
+     *
+     * @Column(name="username", type="string", nullable=true)
+     */
     protected $username;
 
-    /** @Column(type="string") */
+
+    /**
+     * @var string $oauth_provider
+     *
+     * @Column(name="oauth_provider", type="string", nullable=true)
+     */
     protected $oauth_provider;
 
-    /** @Column(type="string") */
+
+    /**
+     * @var string $oauth_uid
+     *
+     * @Column(name="oauth_uid", type="string", nullable=true)
+     */
     protected $oauth_uid;
 
-    /** @Column(type="string") */
+
+    /**
+     * @var string $oauth_token
+     *
+     * @Column(name="oauth_token", type="string", nullable=true)
+     */
     protected $oauth_token;
 
-    /** @Column(type="string") */
+    /**
+     * @var string $oauth_secret
+     *
+     * @Column(name="oauth_secret", type="string", nullable=true)
+     */
     protected $oauth_secret;
 
     /**
