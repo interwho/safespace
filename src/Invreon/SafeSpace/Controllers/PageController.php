@@ -73,24 +73,25 @@ class PageController extends Controller
         if (isset($requestToken['oauth_token']) && isset($requestToken['oauth_token'])) {
             $doctrine = new DoctrineService();
 
-            $entityManager = $doctrine->getManager();
             /** @var User $user */
-            $user = $entityManager->getRepository('User')->findOneBy(['oauth_token' => $requestToken['oauth_token']]);
+            $user = $doctrine->getRepository('User')->findOneBy(['oauth_token' => $requestToken['oauth_token']]);
 
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
             $access_token = $connection->oauth("oauth/access_token", array("oauth_verifier" => $requestToken['oauth_verifier']));
 
-            var_dump($access_token); die();
-//            $user->setOAuthUid( $requestToken['oauth_token']);
+            $user->setOAuthUid( $requestToken['oauth_token']);
 
             // obtaining the entity manager
             $user->setOAuthProvider($access_token);
-            $entityManager->persist($user);
-            $entityManager->flush();
+
+            $em = (new DoctrineService())->getManager();
+            $em->persist($user);
+            $em->flush($user);
 
             $context['user'] = $connection->get("account/verify_credentials");
 
+            var_dump($context['user']); die();
             return $this->createResponse($twigService->render('Home.html.twig', $context));
         }
 

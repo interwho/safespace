@@ -18,5 +18,5 @@ define('BASE_HAVEN_URL', 'https://api.havenondemand.com/1/api/sync/analyzesentim
 
 define('TWITTER_CONSUMER_KEY', 'Ll1tmLRY4QJSuDxHa9LXZQ');
 define('TWITTER_CONSUMER_SECRET', 'SWNp5WdpX7076n7mIZLtOtUrtzFK4nVOkyeDnDBWA');
-define('TWITTER_OAUTH_CALLBACK', 'http://8c40bed8.ngrok.io/twitter');
+define('TWITTER_OAUTH_CALLBACK', 'http://ea91ebdd.ngrok.io/twitter');
 //define('TWITTER_OAUTH_CALLBACK', 'http://www.thesafespace.com/twitter');
