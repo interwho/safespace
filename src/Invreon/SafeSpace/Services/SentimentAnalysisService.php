@@ -10,7 +10,7 @@ class SentimentAnalysisService
      * @param $text $string
      * @return boolean
      */
-    public function analyzeText($text)
+    public function isPositiveText($text)
     {
         $text = $this->makeTextUrlFriendly($text);
 
