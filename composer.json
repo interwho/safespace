@@ -19,6 +19,7 @@
     },
     "require": {
         "php": ">=5.5.0",
+        "doctrine/migrations": "1.0.0",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-openssl": "*",
