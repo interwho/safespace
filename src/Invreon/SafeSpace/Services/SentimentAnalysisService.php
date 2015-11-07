@@ -40,7 +40,7 @@ class SentimentAnalysisService
 
     /**
      * @param $responseBody
-     * @return bool
+     * @return boolean
      */
     private function analyzeSentimentResponse($responseBody) {
         $negativeResults = $responseBody['negative'];
