@@ -14,9 +14,9 @@ $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../src/
 
 // database configuration parameters
 $conn = array(
-    'dbname' => 'safespace_db',
+    'dbname' => 'safespace',
     'user' => 'root',
-    'password' => '123456',
+    'password' => 'root',
     'host' => 'localhost',
     'driver' => 'pdo_mysql',
 );

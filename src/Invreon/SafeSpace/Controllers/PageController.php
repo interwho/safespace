@@ -28,10 +28,9 @@ class PageController extends Controller
         $user->setOAuthToken($requestToken['oauth_token']);
         $user->setOAuthSecret($requestToken['oauth_token_secret']);
 
-        /** @var UserRepository $userRepository */
-        $userRepository = (new DoctrineService())->getRepository('User');
-
-        $userRepository->create($user);
+        $em = (new DoctrineService())->getManager();
+        $em->persist($user);
+        $em->flush($user);
 
         $loginUrl = $connection->url('oauth/authorize', array('oauth_token' => $requestToken['oauth_token']));
 

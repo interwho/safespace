@@ -15,7 +15,7 @@ class User
      *
      * @Column(name="id", type="integer", nullable=true)
      * @Id
-     * @GeneratedValue
+     * @GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
@@ -57,6 +57,10 @@ class User
      */
     protected $oauth_secret;
 
+    public function __construct()
+    {
+        $this->username = "temp";
+    }
     /**
      * @return mixed
      */
