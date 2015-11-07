@@ -34,4 +34,11 @@ class PageController extends Controller
 
         return $this->createResponse($twigService->render('Contact.html.twig', $context));
     }
+
+    public function login()
+    {
+        $twigService = new TwigService();
+        $twigService->setTwigDirectory('Public');
+
+    }
 }
