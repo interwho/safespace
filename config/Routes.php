@@ -44,11 +44,11 @@ $collection->add(
 );
 
 $collection->add(
-    'MessageController_email',
+    'PageController_twitter',
     new Route(
-        '/latest',
+        '/twitter',
         array(
-            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::latest'
+            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::twitter'
         ),
         array(
             '_method' => 'GET'
