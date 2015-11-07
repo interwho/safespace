@@ -9,8 +9,9 @@ $GLOBALS['DATABASE'] = array(
     'driver'   => 'pdo_mysql',
     'host'     => 'localhost',
     'user'     => 'root',
-    'password' => 'root',
-    'dbname'   => 'safespace'
+//    'password' => 'root',
+    'password' => '123456',
+    'dbname'   => 'safespace_db'
 );
 
 define('HAVEN_API_KEY', '0b33b80f-771d-436c-9347-88d0312e5a44');
