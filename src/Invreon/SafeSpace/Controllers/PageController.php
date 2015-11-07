@@ -7,6 +7,7 @@ use Invreon\SafeSpace\Services\DoctrineService;
 use Invreon\SafeSpace\Services\TwigService;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Symfony\Component\HttpFoundation\Request;
+use Invreon\SafeSpace\Repositories\UserRepository;
 
 /**
  * Class PageController
@@ -27,13 +28,10 @@ class PageController extends Controller
         $user->setOAuthToken($requestToken['oauth_token']);
         $user->setOAuthSecret($requestToken['oauth_token_secret']);
 
-        $doctrine = new DoctrineService();
+        /** @var UserRepository $userRepository */
+        $userRepository = (new DoctrineService())->getRepository('User');
 
-        $entityManager = $doctrine->getManager();
-
-        $entityManager->contains(null);
-//        $entityManager->persist($user);
-        $entityManager->flush();
+        $userRepository->create($user);
 
         $loginUrl = $connection->url('oauth/authorize', array('oauth_token' => $requestToken['oauth_token']));
 
