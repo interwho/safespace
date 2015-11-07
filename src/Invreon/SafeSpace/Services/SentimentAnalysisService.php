@@ -1,8 +1,8 @@
 <?php
 namespace Invreon\SafeSpace\Services;
 
-use HttpException;
-use HttpRequest;
+use Httpful\Request;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class SentimentAnalysisService
 {
@@ -13,18 +13,25 @@ class SentimentAnalysisService
     public function isPositiveText($text)
     {
         $text = $this->makeTextUrlFriendly($text);
+        $request = Request::get(BASE_HAVEN_URL . '&text=' . $text);
 
-        $request = new HttpRequest(BASE_HAVEN_URL, HttpRequest::METH_GET);
-        $request->addQueryData(array('text' => $text));
+//        $request = new HttpRequest(BASE_HAVEN_URL, HttpRequest::METH_GET);
+//        $request->addQueryData(array('text' => $text));
 
         try {
-            $request->send();
-            if ($request->getResponseCode() == 200) {
-                return $this->isPositiveResponse($request->getResponseBody());
+//            $request->send();
+            $response = $request->send();
+            if ($response->code == 200) {
+                return $this->isPositiveResponse($response->body);
             } else {
                 return false;
             }
-        } catch (HttpException $ex) {
+//            if ($request->getResponseCode() == 200) {
+//                return $this->isPositiveResponse($request->getResponseBody());
+//            } else {
+//                return false;
+//            }
+        } catch (Exception $ex) {
             echo $ex;
         }
     }
@@ -43,7 +50,7 @@ class SentimentAnalysisService
      * @return boolean
      */
     private function isPositiveResponse($responseBody) {
-        $negativeResults = $responseBody['negative'];
+        $negativeResults = $responseBody->negative;
 
         if (!empty($negativeResults)) {
             return false;
