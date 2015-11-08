@@ -1,6 +1,23 @@
 {% include 'Public/Header.html.twig' with {'page_name': 'Home'} %}
 <div class="container">
 
+    <div class="jumbotron">
+        <h1>This is your safe space.</h1>
+        <p>Read your tweets and mentions without having to worry about all the negativity that usually comes with using Twitter.</p>
+        <p><a class="btn btn-primary btn-lg" href="/about" role="button">Learn more</a></p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12 text-center">
             <h1>Remove negativity from your tweets, now!</h1>
@@ -10,14 +27,12 @@
             </a>
 
             {% if tweets is defined %}
-            <div>
-                <h1>No Negative Tweets!</h1>
-                <ul>
-                    {% for tweet in tweets %}
-                        <li> {{ tweet }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+                <div>
+                    <h1>We couldn't find any tweets...</h1>
+                        {% for tweet in tweets %}
+                            <div class="well well-sm">{{ tweet }}</div>
+                        {% endfor %}
+                </div>
             {% endif %}
         </div>
     </div>
