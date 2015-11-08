@@ -96,13 +96,22 @@ class PageController extends Controller
             // Grab tweets with a new connection
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
-            $recentTweets = $connection->get("statuses/user_timeline", array(
-                "count" => 25,
-                "exclude_replies" => true,
-                "screen_name" => $user->getUsername())
+//            $recentTweets = $connection->get("statuses/home_timeline", array(
+//                    "count" => 25,
+//                    "exclude_replies" => true,
+//                    "trim_user" => true
+//                )
+//            );
+
+            // Using search instead of timeline
+            $recentTweets = $connection->get("search/tweets", array(
+                    "q" => "@" . $user->getUsername()
+                )
             );
 
-            $positiveTweets = $this->grabPositiveTweets($recentTweets);
+            $parsedTweets = $this->parseSearchResults($recentTweets->statuses);
+
+            $positiveTweets = $this->grabPositiveTweets($parsedTweets, $user->getUsername());
 
             $context['tweets'] = $positiveTweets;
 
@@ -112,33 +121,40 @@ class PageController extends Controller
         return $this->createResponse($twigService->render('Home.html.twig', $context));
     }
 
-    /**
-     * @param $tweets
-     * @return array
-     */
-    private function grabPositiveTweets($tweets) {
+    public function search(Request $request)
+    {
+        
+    }
+
+    private function parseSearchResults($tweets) {
         $textArray = [];
-        foreach ($tweets as $tweet) {
-            array_push($textArray, $tweet->text);
+
+        $size = count($tweets);
+
+        for ($i = 0; $i < $size; $i++) {
+            array_push($textArray, $tweets[$i]->text);
         }
 
-        return $this->filterTweets($textArray);
+        return $textArray;
     }
 
     /**
+     * @param $username
      * @param $tweetArray
      * @return array
      */
-    private function filterTweets($tweetArray) {
+    private function grabPositiveTweets($tweetArray, $username) {
         $sentimentService = new SentimentAnalysisService();
 
         $positiveTweets = [];
         foreach ($tweetArray as $tweet) {
-            if ($sentimentService->isPositiveText($tweet)) {
+            // replace username that was in search
+            $pureText = str_replace('@' .$username, "", $tweet);
+            if ($sentimentService->isPositiveText($pureText)) {
                 array_push($positiveTweets, $tweet);
             }
         }
 
-        return $positiveTweets ;
+        return $positiveTweets;
     }
 }
