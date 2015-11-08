@@ -31,11 +31,11 @@ $collection->add(
 );
 
 $collection->add(
-    'PageController_login',
+    'PageController_search',
     new Route(
-        '/login',
+        '/search',
         array(
-            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::login'
+            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::search'
         ),
         array(
             '_method' => 'GET'
