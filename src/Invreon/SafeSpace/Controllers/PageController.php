@@ -50,16 +50,6 @@ class PageController extends Controller
         return $this->createResponse($twigService->render('About.html.twig', $context));
     }
 
-    public function login()
-    {
-        $twigService = new TwigService();
-        $twigService->setTwigDirectory('Public');
-
-        $context['active'] = $this->session->has('username');
-
-        return $this->createResponse($twigService->render('Login.html.twig', $context));
-    }
-
     public function twitter(Request $request)
     {
         $twigService = new TwigService();
@@ -113,13 +103,13 @@ class PageController extends Controller
 
         $searchString = $request->get('search');
 
-        $requestToken = [];
-        $requestToken['oauth_token'] = $request->get('oauth_token');
-        $requestToken['oauth_verifier'] = $request->get('oauth_verifier');
+        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
 
+        // Grab request tokens
+        $requestToken = $connection->oauth('oauth/request_token', array('oauth_callback' => TWITTER_OAUTH_CALLBACK));
 
-        // Grab tweets with a new connection
-        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_OAUTH_TOKEN, TWITTER_OAUTH_SECRET);
+        // Make connection
+        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $requestToken['oauth_token'], $requestToken['oauth_token_secret']);
 
         $positiveTweets = $this->searchAndFilterTweets($searchString, $connection);
 
@@ -174,6 +164,7 @@ class PageController extends Controller
 
         $positiveTweets = [];
         foreach ($tweetArray as $tweet) {
+            $tweet = urldecode($tweet);
             // replace username that was in search
             $pureText = str_replace('@' .$username, "", $tweet);
             if ($sentimentService->isPositiveText($pureText)) {
