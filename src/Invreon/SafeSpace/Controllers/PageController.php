@@ -129,6 +129,7 @@ class PageController extends Controller
     }
 
     /**
+     * Sends a request to twitter for tweets, and filters out negative ones
      * @param $searchString string
      * @param $connection TwitterOAuth
      * @return array
@@ -144,6 +145,11 @@ class PageController extends Controller
         return $this->grabPositiveTweets($parsedTweets, $searchString);
     }
 
+    /**
+     * Turns array of $tweet search objects to an array of text
+     * @param $tweets
+     * @return array
+     */
     private function parseSearchResults($tweets) {
         $textArray = [];
 
@@ -157,6 +163,8 @@ class PageController extends Controller
     }
 
     /**
+     * Filters an array of texts by removing the search string and using
+     * the sentiment analysis service
      * @param $username
      * @param $tweetArray
      * @return array
