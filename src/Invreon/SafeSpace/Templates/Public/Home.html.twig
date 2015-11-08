@@ -1,7 +1,7 @@
 {% include 'Public/Header.html.twig' with {'page_name': 'Home'} %}
 <div class="container">
 
-    <div class="jumbotron">
+    <div class="jumbotron" style="padding-top: 75px;">
         <h1>This is your safe space.</h1>
         <p>Read your tweets and mentions without having to worry about all the negativity that usually comes with using Twitter.</p>
         <p><a class="btn btn-primary btn-lg" href="/about" role="button">Learn more</a></p>
@@ -16,7 +16,7 @@
             </a>
 
             <div>
-                <div class="input-group" style="width: 25%;">
+                <div class="input-group" style="width: 25%; padding-top: 50px; padding-top: 50px;">
                     <input type="text" class="form-control" placeholder="Search for...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">Go!</button>
@@ -28,7 +28,7 @@
                 <div>
                     <div class="alert alert-info" role="alert">We couldn't find any tweets...</div>
                         {% for tweet in tweets %}
-                            <div class="well well-sm">{{ tweet }}</div>
+                            <div class="well well-sm" style="padding-top: 20px; padding-top: 20px;">{{ tweet }}</div>
                         {% endfor %}
                 </div>
             {% endif %}
