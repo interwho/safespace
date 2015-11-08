@@ -6,12 +6,14 @@
         <p>Read your tweets and mentions without having to worry about all the negativity that usually comes with using Twitter.</p>
         <p><a class="btn btn-primary btn-lg" href="{{ login_url }}" role="button">Login with Twitter</a></p>
         <p>
-        <div class="input-group" style="width: 250px; padding-top: 20px; padding-bottom: 20px;">
-            <input type="text" class="form-control" placeholder="Search Twitter...">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Go!</button>
-            </span>
-        </div>
+        <form action="/search" method="get">
+            <div class="input-group" style="width: 250px; padding-top: 20px; padding-bottom: 20px;">
+                <input type="text" class="form-control" name="searchString" placeholder="Search Twitter...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go!</button>
+                </span>
+            </div>
+        </form>
         </p>
     </div>
 
