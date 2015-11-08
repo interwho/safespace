@@ -5,19 +5,18 @@
         <h1>This is your safe space.</h1>
         <p>Read your tweets and mentions without having to worry about all the negativity that usually comes with using Twitter.</p>
         <p><a class="btn btn-primary btn-lg" href="{{ login_url }}" role="button">Login with Twitter</a></p>
+        <p>
+        <div class="input-group" style="width: 250px; padding-top: 20px; padding-bottom: 20px;">
+            <input type="text" class="form-control" placeholder="Search Twitter...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+            </span>
+        </div>
+        </p>
     </div>
 
     <div class="row">
         <div class="col-lg-12 text-center">
-            <div style="padding-left: 50%; padding-right: 50%;">
-                <div class="input-group" style="width: 250px; padding-top: 50px; padding-bottom: 50px;">
-                    <input type="text" class="form-control" placeholder="Search Twitter...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                </div>
-            </div>
-
             {% if tweets is defined %}
                 <div>
                     <div class="alert alert-info" role="alert">We couldn't find any tweets...</div>
