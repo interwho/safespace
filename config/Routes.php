@@ -31,6 +31,19 @@ $collection->add(
 );
 
 $collection->add(
+    'PageController_contact',
+    new Route(
+        '/contact',
+        array(
+            '_controller' => 'Invreon\SafeSpace\Controllers\PageController::contact'
+        ),
+        array(
+            '_method' => 'GET'
+        )
+    )
+);
+
+$collection->add(
     'PageController_search',
     new Route(
         '/search',

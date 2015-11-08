@@ -50,6 +50,16 @@ class PageController extends Controller
         return $this->createResponse($twigService->render('About.html.twig', $context));
     }
 
+    public function contact()
+    {
+        $twigService = new TwigService();
+        $twigService->setTwigDirectory('Public');
+
+        $context['active'] = $this->session->has('username');
+
+        return $this->createResponse($twigService->render('Contact.html.twig', $context));
+    }
+
     public function twitter(Request $request)
     {
         $twigService = new TwigService();
