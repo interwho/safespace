@@ -71,7 +71,7 @@ class PageController extends Controller
 
         $context = [];
 
-        if (isset($requestToken['oauth_token']) && isset($requestToken['oauth_token'])) {
+        if (isset($requestToken['oauth_token'])) {
             $doctrine = new DoctrineService();
 
             /** @var User $user */
@@ -96,22 +96,7 @@ class PageController extends Controller
             // Grab tweets with a new connection
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
-//            $recentTweets = $connection->get("statuses/home_timeline", array(
-//                    "count" => 25,
-//                    "exclude_replies" => true,
-//                    "trim_user" => true
-//                )
-//            );
-
-            // Using search instead of timeline
-            $recentTweets = $connection->get("search/tweets", array(
-                    "q" => "@" . $user->getUsername()
-                )
-            );
-
-            $parsedTweets = $this->parseSearchResults($recentTweets->statuses);
-
-            $positiveTweets = $this->grabPositiveTweets($parsedTweets, $user->getUsername());
+            $positiveTweets = $this->searchAndFilterTweets($user->getUsername(), $connection);
 
             $context['tweets'] = $positiveTweets;
 
@@ -123,7 +108,40 @@ class PageController extends Controller
 
     public function search(Request $request)
     {
-        
+        $twigService = new TwigService();
+        $twigService->setTwigDirectory('Public');
+
+        $searchString = $request->get('search');
+
+        $requestToken = [];
+        $requestToken['oauth_token'] = $request->get('oauth_token');
+        $requestToken['oauth_verifier'] = $request->get('oauth_verifier');
+
+
+        // Grab tweets with a new connection
+        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_OAUTH_TOKEN, TWITTER_OAUTH_SECRET);
+
+        $positiveTweets = $this->searchAndFilterTweets($searchString, $connection);
+
+        $context['tweets'] = $positiveTweets;
+
+        return $this->createResponse($twigService->render('Home.html.twig', $context));
+    }
+
+    /**
+     * @param $searchString string
+     * @param $connection TwitterOAuth
+     * @return array
+     */
+    private function searchAndFilterTweets($searchString, $connection) {
+        $recentTweets = $connection->get("search/tweets", array(
+                "q" => "@" . $searchString
+            )
+        );
+
+        $parsedTweets = $this->parseSearchResults($recentTweets->statuses);
+
+        return $this->grabPositiveTweets($parsedTweets, $searchString);
     }
 
     private function parseSearchResults($tweets) {
