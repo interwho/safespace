@@ -101,15 +101,15 @@ class PageController extends Controller
         $twigService = new TwigService();
         $twigService->setTwigDirectory('Public');
 
-        $searchString = $request->get('search');
+        $searchString = $request->get('searchString');
 
-        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+//        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
 
         // Grab request tokens
-        $requestToken = $connection->oauth('oauth/request_token', array('oauth_callback' => TWITTER_OAUTH_CALLBACK));
+//        $requestToken = $connection->oauth('oauth/request_token');
 
         // Make connection
-        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $requestToken['oauth_token'], $requestToken['oauth_token_secret']);
+        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
         $positiveTweets = $this->searchAndFilterTweets($searchString, $connection);
 
