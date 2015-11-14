@@ -3,6 +3,7 @@ namespace Invreon\SafeSpace\Controllers;
 
 use DateTime;
 use Exception;
+use Invreon\SafeSpace\Services\TwigService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -28,6 +29,11 @@ abstract class Controller
     protected $session;
 
     /**
+     * @var
+     */
+    protected $twigService;
+
+    /**
      * Controller Initializer
      */
     public function __construct()
@@ -36,6 +42,8 @@ abstract class Controller
         $this->session->start();
         $this->params = $_REQUEST;
         $this->files = $_FILES;
+        $this->twigService = new TwigService();
+        $this->twigService->setTwigDirectory('Public');
     }
 
     /**
@@ -75,5 +83,17 @@ abstract class Controller
             Response::HTTP_FOUND,
             array('Location' => $newLocation)
         );
+    }
+
+    /**
+     * Render twig file with proper context
+     *
+     * @param $twigFile
+     * @param $context
+     * @return string
+     */
+    protected function render($twigFile, $context)
+    {
+        return $this->twigService->render($twigFile, $context);
     }
 }
