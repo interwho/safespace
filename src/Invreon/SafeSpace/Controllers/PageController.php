@@ -8,7 +8,6 @@ use Invreon\SafeSpace\Services\SentimentAnalysisService;
 use Invreon\SafeSpace\Services\TwigService;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Symfony\Component\HttpFoundation\Request;
-use Invreon\SafeSpace\Repositories\UserRepository;
 
 /**
  * Class PageController
@@ -96,9 +95,7 @@ class PageController extends Controller
             // Grab tweets with a new connection
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $user->getOAuthToken(), $user->getOAuthSecret());
 
-            $positiveTweets = $this->searchAndFilterTweets($user->getUsername(), $connection);
-
-            $context['tweets'] = $positiveTweets;
+            $context['tweets'] = $this->searchAndFilterTweets($user->getUsername(), $connection);
 
             return $this->createResponse($twigService->render('Home.html.twig', $context));
         }
@@ -113,17 +110,10 @@ class PageController extends Controller
 
         $searchString = $request->get('searchString');
 
-//        $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
-
-        // Grab request tokens
-//        $requestToken = $connection->oauth('oauth/request_token');
-
         // Make connection
         $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-        $positiveTweets = $this->searchAndFilterTweets($searchString, $connection);
-
-        $context['tweets'] = $positiveTweets;
+        $context['tweets'] = $this->searchAndFilterTweets($searchString, $connection);
 
         return $this->createResponse($twigService->render('Home.html.twig', $context));
     }
@@ -134,7 +124,8 @@ class PageController extends Controller
      * @param $connection TwitterOAuth
      * @return array
      */
-    private function searchAndFilterTweets($searchString, $connection) {
+    private function searchAndFilterTweets($searchString, $connection)
+    {
         $recentTweets = $connection->get("search/tweets", array(
                 "q" => "@" . $searchString
             )
@@ -150,7 +141,8 @@ class PageController extends Controller
      * @param $tweets
      * @return array
      */
-    private function parseSearchResults($tweets) {
+    private function parseSearchResults($tweets)
+    {
         $textArray = [];
 
         $size = count($tweets);
@@ -169,14 +161,15 @@ class PageController extends Controller
      * @param $tweetArray
      * @return array
      */
-    private function grabPositiveTweets($tweetArray, $username) {
+    private function grabPositiveTweets($tweetArray, $username)
+    {
         $sentimentService = new SentimentAnalysisService();
 
         $positiveTweets = [];
         foreach ($tweetArray as $tweet) {
             $tweet = urldecode($tweet);
             // replace username that was in search
-            $pureText = str_replace('@' .$username, "", $tweet);
+            $pureText = str_replace('@' . $username, "", $tweet);
             if ($sentimentService->isPositiveText($pureText)) {
                 array_push($positiveTweets, $tweet);
             }
