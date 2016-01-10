@@ -2,6 +2,8 @@
 
 SafeSpace filters your Twitter feed and searches for potentially negative, triggering content using the HP Haven OnDemand Sentiment APIs. Created by Justin Paulin (@interwho) and Cheng Peng (@chunky123) for YHack Fall 2015.
 
+[DevPost Submission](http://devpost.com/software/safespace-zdi05g)
+
 # Usage
 
 Requires a basic LAMP stack to run - Verify API keys and MySQL credentials in config/Config.php. PHP 5.5.0 recommended.
